@@ -19,6 +19,17 @@
 
 module.exports.policies = {
 
+  // To use with 'sails-generate-auth'
+  ' * ' : ['passport', 'sessionAuth'],
+  'auth': { 
+    '*' : ['passport']
+  },
+  'UserController' : {
+      ' * ': ['passport','bearerAuth']
+  }
+
+
+
   /***************************************************************************
   *                                                                          *
   * Default policy for all controllers and actions (`true` allows public     *
