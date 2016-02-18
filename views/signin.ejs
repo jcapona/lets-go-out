@@ -4,42 +4,20 @@
   
   <button type="button" class="btn btn-default btn-lg btn-block" id="login-btn">Login! <span class="caret"></span></button>
   <div class="container hidden" id="login-form">
-    <form id="local-signin" action="/login" method="post">
-      <div class="form-group">
-          <label>Username:</label>
-          <input type="text" name="username" placeholder="Username" class="form-control">
-      </div>
-      <div class="form-group">
-          <label>Password:</label>
-          <input type="password" name="password" placeholder="Password" class="form-control">
-      </div>
-      <div class="form-group">
-          <input type="submit" value="Log In"/>
-      </div>
-    </form>
+    <form role="form" action="/login" method="post">
+        <input type="username" name="username" placeholder="Username">
+        <input type="password" name="password" placeholder="Password">
+        <button type="submit">Log in</button>
+      </form>
   </div>
   <button type="button" class="btn btn-default btn-lg btn-block" id="register-btn">Register <span class="caret"></span></button>
   <div class="container hidden" id="reg-form">
-    <form id="local-reg" action="/user/create" method="post">
-      <div class="form-group">
-          <label>New Username:</label>
-          <input type="text" name="username" required placeholder="Enter a username" class="form-control">
-      </div>
-      <div class="form-group">
-          <label>Name:</label>
-          <input type="text" name="name" required placeholder="Enter your name" class="form-control">
-      </div>
-      <div class="form-group">
-          <label>Password:</label>
-          <input type="password" name="password" required placeholder="Enter your password" class="form-control">
-      </div>
-      <div class="form-group">
-          <label>E-Mail:</label>
-          <input type="email" name="email" required placeholder="Enter a valid email address" class="form-control">
-      </div>
-      <div class="form-group">
-          <input type="submit" value="Register"/>
-      </div>
+    <form role="form" action="/user" method="post">
+      <input type="text" name="username" placeholder="Username">
+      <input type="text" name="name" placeholder="Name">
+      <input type="text" name="email" placeholder="Email">
+      <input type="password" name="password" placeholder="Password">
+      <button type="submit">Register</button>
     </form>
   </div>
 </div>
