@@ -19,7 +19,7 @@
 
 module.exports.policies = {
 
-   '*': true,
+   '*': 'flash',
 
   'EventController': {
     '*': 'isAuthenticated'
