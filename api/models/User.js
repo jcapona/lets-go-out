@@ -1,41 +1,51 @@
 /**
-* User.js
-*
-* @description :: TODO: You might write a short summary of how this model works and what it represents here.
-* @docs        :: http://sailsjs.org/#!documentation/models
-*/
+ * User.js
+ *
+ * @description :: Model of a simple user of the app
+ * @docs        :: http://sailsjs.org/documentation/concepts/models-and-orm/models
+ */
+
+var bcrypt = require('bcrypt');
 
 module.exports = {
-
-  attributes: {
-
-    name: {
-      type: 'string',
-      required: true
+    attributes: {
+        username: {
+            type: 'string',
+            minLength: 6,
+            required: true,
+            unique: true
+        },
+        email: {
+            type: 'email',
+            required: true,
+            unique: true
+        },
+        password: {
+            type: 'string',
+            minLength: 6,
+            required: true
+        },
+        name: {
+            type: 'string',
+            required: true
+        },
+        toJSON: function() {
+            var obj = this.toObject();
+            delete obj.password;
+            return obj;
+        }
     },
-    username: {
-      type: 'string',
-      required: true
-    },
-    email: {
-      type: 'string',
-      required: true,
-      unique: true
-    },
-    encryptedPassword: {
-      type: 'string'
-    },
-
-
-    // Este método es para evitar pasar toda la información del modelo
-    // Evitamos pasar los siguientes parámetros: password, confirmation, encryptedpassword y _csrf. 
-    toJSON: function() { 
-      var obj = this.toObject();
-      delete obj.password;
-      delete obj.confirmation;
-      delete obj.encryptedPassword;
-      delete obj._csrf;
-      return obj;
+    beforeCreate: function(user, cb) {
+        bcrypt.genSalt(10, function(err, salt) {
+            bcrypt.hash(user.password, salt, function(err, hash) {
+                if (err) {
+                    console.log(err);
+                    cb(err);
+                } else {
+                    user.password = hash;
+                    cb();
+                }
+            });
+        });
     }
-  }
 };
