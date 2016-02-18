@@ -60,17 +60,34 @@
 
 <div class="container">
 
-  <% if(typeof error == 'object' && error) { %>
-    <div class="alert alert-danger" role="alert"><p><%=error%></p></div>
-  <% }%>
+   <% if (req.session.flash) { %>
+      
+      <% if (req.session.flash.error) { %>
+      <div data-alert class="alert alert-danger" role="alert">
+        <i class="fa fa-exclamation-circle"></i>
+        <%= req.flash('error') %>
+        <a href="#" class="close">&times;</a>
+      </div>
+      <% } %>
 
-  <% if(typeof success == 'object' && success) { %>
-    <div class="alert alert-success" role="alert"><p><%=success%></p></div>
-  <% } %>
+      <% if (req.session.flash.success) { %>
+      <div data-alert class="alert alert-success" role="alert">
+        <i class="fa fa-check-circle-o"></i>
+        <%= req.flash('success') %>
+        <a href="#" class="close">&times;</a>
+      </div>
+      <% } %>
 
-  <% if(typeof notice == 'object' && notice) { %>
-    <div class="alert alert-info" role="alert"><p><%=notice%></p></div>
-  <% } %>
+      <% if (req.session.flash.notice) { %>
+      <div data-alert class="alert alert-info" role="alert">
+        <i class="fa fa-exclamation"></i>
+        <%= req.flash('notice ') %>
+        <a href="#" class="close">&times;</a>
+      </div>
+      <% } %>
+   
+   <% } %>
+
 </div>
 
   <div>
