@@ -5,10 +5,6 @@ module.exports = function(req, res, next) {
 
 	res.locals.flash = _.clone(req.session.flash);
 
-	console.log("Flash!");
-	console.log(res.locals.flash);
-
-
 	// clear flash
 	req.session.flash={};
 	next();
