@@ -35,7 +35,7 @@ module.exports = {
   logout: function(req, res) {
     req.logout();
     req.session.flash = {
-      success: "Succesfully logged out. Come back later!"
+      success: "You've been logged out. Come back later!"
     } 
     res.redirect('/');
   }
