@@ -2,7 +2,7 @@
   "name": "lets-go-out",
   "private": true,
   "version": "0.0.0",
-  "description": "a Sails application",
+  "description": "Night coordination app",
   "keywords": [],
   "dependencies": {
     "bcrypt": "^0.8.5",
