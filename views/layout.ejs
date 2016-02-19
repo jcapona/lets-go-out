@@ -14,89 +14,80 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">  
   <link rel="stylesheet" type="text/css" href="linker/styles/main_style.css">
 
-  <link href='https://fonts.googleapis.com/css?family=Indie+Flower' rel='stylesheet' type='text/css'>
-  <link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
-  <link href='https://fonts.googleapis.com/css?family=Droid+Sans:400,700' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,300,700,900' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
 
   <title>Lets go out! | Nightlife coordination app</title>  
 </head>
 
 <body>
 
-<nav id="nav" class="navbar navbar-default">
+  <nav id="nav" class="navbar navbar-default">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <!--<a id="logo" class="navbar-brand" href="/">Let's go out!</a>-->
+      </div>
+
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+
+  <% if(req.user !== undefined) { %>
+        <ul class="nav navbar-nav navbar-right">
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Hi <%=req.user.name%>!<span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li><a href="/dashboard"><i class="fa fa-tachometer"></i> Dashboard</a></li>
+              <li role="separator" class="divider"></li>
+              <li><a href="/logout"><i class="fa fa-power-off"></i> Logout</a></li>
+            </ul>
+          </li>
+        </ul>
+  <% } else { %>
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="/signin">Log In</a></li>
+        </ul>
+  <% } %>
+
+      </div>
+    </div>
+  </nav>
+
+
+  <% if (req.session.flash) { %>
+  <div class = "container">
+    <% if (req.session.flash.error) { %>
+    <div data-alert class="alert alert-danger" role="alert">
+      <i class="fa fa-exclamation-circle"></i>
+      <%= req.flash('error') %>
+      <a href="#" class="close">&times;</a>
+    </div>
+    <% } %>
+
+    <% if (req.session.flash.success) { %>
+    <div data-alert class="alert alert-success" role="alert">
+      <i class="fa fa-check-circle-o"></i>
+      <%= req.flash('success') %>
+      <a href="#" class="close">&times;</a>
+    </div>
+    <% } %>
+
+    <% if (req.session.flash.notice) { %>
+    <div data-alert class="alert alert-info" role="alert">
+      <i class="fa fa-exclamation"></i>
+      <%= req.flash('notice ') %>
+      <a href="#" class="close">&times;</a>
+    </div>
+    <% } %>
+  </div> 
+  <% } %>
+
   <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a id="logo" class="navbar-brand" href="/">Let's go out!</a>
-    </div>
-
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-
-<% if(req.user !== undefined) { %>
-      <ul class="nav navbar-nav navbar-right">
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Hi <%=req.user.name%>!<span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li><a href="/dashboard"><i class="fa fa-tachometer"></i> Dashboard</a></li>
-            <li role="separator" class="divider"></li>
-            <li><a href="/logout"><i class="fa fa-power-off"></i> Logout</a></li>
-          </ul>
-        </li>
-      </ul>
-<% } else { %>
-      <ul class="nav navbar-nav navbar-right">
-        <li><a href="/signin">Log In</a></li>
-      </ul>
-<% } %>
-
-    </div>
-  </div>
-</nav>
-
-<div class="container">
-
-   <% if (req.session.flash) { %>
-      
-      <% if (req.session.flash.error) { %>
-      <div data-alert class="alert alert-danger" role="alert">
-        <i class="fa fa-exclamation-circle"></i>
-        <%= req.flash('error') %>
-        <a href="#" class="close">&times;</a>
-      </div>
-      <% } %>
-
-      <% if (req.session.flash.success) { %>
-      <div data-alert class="alert alert-success" role="alert">
-        <i class="fa fa-check-circle-o"></i>
-        <%= req.flash('success') %>
-        <a href="#" class="close">&times;</a>
-      </div>
-      <% } %>
-
-      <% if (req.session.flash.notice) { %>
-      <div data-alert class="alert alert-info" role="alert">
-        <i class="fa fa-exclamation"></i>
-        <%= req.flash('notice ') %>
-        <a href="#" class="close">&times;</a>
-      </div>
-      <% } %>
-   
-   <% } %>
-
-</div>
-
-  <div>
     <%- body %>
-  </div>
-
-  <div class="container">
-    <h1 id="logo" class="text-center" style="font-size: 300%;">Let's go out!</h1>
-    <p class="text-center" style="font-size: 75%;">©2016 All Rights Reserved. Let's go out!</p>
   </div>
   
   <script src="/js/dependencies/sails.io.js"></script>
