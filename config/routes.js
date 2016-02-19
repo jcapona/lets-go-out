@@ -28,7 +28,8 @@ module.exports.routes = {
   '/signin': {
     view: 'signin'
   },
-  'post /login': 'AuthController.login',
+  'POST /login': 'AuthController.login',
   '/logout': 'AuthController.logout', 
+  'GET /event/*': 'EventController.search',
 
 };
