@@ -1,17 +1,10 @@
 body {
-  background-color: white;
+  background-color: #F45B69;
 }
 
-#header {
-	padding-top: 10vh;
-}
-
-#header h1 {
-	margin: 0 0 70px 0;
-}
 
 #nav {
-  background-color: white;
+  background-color: #F45B69;
   width: 100%;
   min-height: 0;
   max-height: auto;
@@ -19,22 +12,100 @@ body {
   border-color: transparent;
 }
 
+#logo {
+  font-family: 'Montserrat', sans-serif;
+  color: #E4FDE1;
+}
+
+#main {
+	height: 80vh;
+}
+
+#main h1 {
+	font-size: 700%;
+}
+
+#main p {
+	font-size: 300%;
+}
+
+#main table {
+	width: 100%;
+}
+
+#main td {
+	width: 50%;
+	height: 80vh;
+}
+
+#main tr {
+	vertical-align: middle;
+}
+
+#main a {
+	color: #E4FDE1;
+	text-decoration: none;	
+}
+
 h1, h2, h3 {
   font-family: 'Montserrat', sans-serif;
-  color: #black;
-  margin: 20px 0 20px 0;
+  color: #E4FDE1;
 }
 
 h4 {
   font-family: 'Montserrat', sans-serif;
 }
 
-p {
+p, li, a {
   font-family: 'Lato', sans-serif;
-  font-weight: normal;
+  font-weight: 300;
   color: black;
 }
 
 #search-bar {
 	margin: 10px 0 50px 0;
+}
+
+.bus-avatar {
+	width: 10%;
+}
+
+.bus-avatar img {
+	max-width: 100px;
+	max-height: 100px;
+}
+
+.bus-avatar img:hover{
+	background: black;
+	opacity: 0.9;
+}
+
+.bus-body {
+	width: 80%;
+	padding-left: 25px; 
+}
+
+.bus-avatar, .bus-body {
+	padding: 10px 10px 10px 10px;
+}
+
+.navbar .navbar-nav {
+  display: inline-block;
+  float: none;
+  vertical-align: top;
+}
+
+.navbar .navbar-collapse {
+  text-align: center;
+}
+
+.bus:hover {
+	background-color: #028090;
+}
+.bus-table {
+	width: 100%;
+}
+
+.bus-social {
+	width: 10%;
 }
