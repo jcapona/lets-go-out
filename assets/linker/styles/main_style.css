@@ -99,8 +99,15 @@ p, li, a {
   text-align: center;
 }
 
+.bus {
+	background-color: white;
+}
 .bus:hover {
-	background-color: #028090;
+	background-color: #E4FDE1;
+}
+
+.bus h2 {
+	color: #028090
 }
 .bus-table {
 	width: 100%;
@@ -108,4 +115,22 @@ p, li, a {
 
 .bus-social {
 	width: 10%;
+}
+
+.row {
+	margin-bottom: 50px;
+}
+
+#header {
+	height: 40vh;
+	padding-top: 20vh;
+}
+
+#header h1 {
+	font-size: 500%;
+	margin: 0;
+}
+
+#header p {
+	font-size: 200%;
 }
