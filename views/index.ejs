@@ -1,43 +1,82 @@
 <!-- index.ejs -->
-<div id="header" class="text-center">
-    	<h1>Plans tonight? <small>Find out what's going on in your area</small></h1>
-</div>
-
-<div id="search-bar">
+<!--
+<div id="main" class="container-fluid">
   <div class="row">
-    <div class="col-md-12">
-      <div class="input-group">
-
-        <span class="input-group-addon input-lg" style="background-color: white; border-width: 0px;">
-          <i class="fa fa-map-marker fa-1x"></i>
-        </span>
-        
-        <input id="search" type="text" name="location" class="form-control input-lg" placeholder="Where are you?">
-        
-        <span class="input-group-btn">
-          <button id="search-btn" class="btn btn-default input-lg" type="button">Go!</button>
-        </span>
-
-      </div>
+    <div class="col-md-6 text-right">
+      <h1>let's go out!</h1>
+      <p>find out what's going on in your area</p>
+    </div>
+    <div class="col-md-6 text-center">
+      <i class="fa fa-search fa-5x"></i>      
     </div>
   </div>
 </div>
+-->
+<div id="main" class="container-fluid">
+  <table>
+    <tr>
+      <td class="text-right">
+        <h1>let's go out!</h1>
+        <p>find out what's going on in your area</p>
+      </td>
+      <td class="text-center">
+        <a href="#" id="search-start" type="button">
+          <i class="fa fa-chevron-right fa-5x"></i>
+        </a>
+      </td>
+    </tr>
+  </table>
+</div>
 
-<div>
-  <span  id="search-results"></span>
+
+<div class="container">
+  <div id="search-bar" class="hidden">
+    <h1 class="text-center">let's go out!</h1>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="input-group">
+
+          <span class="input-group-addon input-lg" style="background-color: white; border-width: 0px;">
+            <i class="fa fa-map-marker fa-1x"></i>
+          </span>
+          
+          <input id="search" type="text" name="location" class="form-control input-lg" placeholder="Where are you?">
+          
+          <span class="input-group-btn">
+            <button id="search-btn" class="btn btn-default input-lg" type="button">Go!</button>
+          </span>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <span  id="search-results"></span>
+  </div>
+
+
+
 </div>
 
 
 <script type="text/javascript">
 
+
+  $("#search-start").on('click',function() {
+    $("#search-bar").removeClass("hidden");
+    $("#search-bar").addClass("show");
+    $("#main").addClass("hidden");
+  });
+
   $("#search").keypress(function() {
-    console.log("Handler for .change() called.");
-    $("#header").addClass("hidden");
+    $("#main").addClass("hidden");
   });
 
   $("#search-btn").on('click',function(e)
   {
-    $("#search-results").html('<div class="text-center"><i class="fa fa-spinner fa-spin fa-5x"></i></div>');
+    var noResults = true;
+    $("#search-results").html('<div class="text-center"><i class="fa fa-circle-o-notch fa-spin fa-5x"></i></div>');
 
     e.stopPropagation();
     e.preventDefault();
@@ -47,59 +86,79 @@
       type: 'GET',
       data: $("#search").serialize(),
       error: function(jqXHR, textStatus, errorThrown) {
-        console.log('Error: ' + textStatus);
+        $("#search-results").html('');
+        $("#search-results").append("<h4 class='text-center'>"+jqXHR['responseJSON']['message']+"</h4>");
       },
       success: function(data) {
         console.log(data);
-        parseJsonResults(data.message.businesses);
+
+        parseJsonResults(data);
       }
     });
   });
 
-  function parseJsonResults(data) {
-/*
+  function parseJsonResults(res) {
+
     var html = "";
     html += "<table>";
 
-
+    data = res.message.businesses;
     for(var i=0; i < data.length; i++)
       {
       html += "<tr>";
-        html += "<td>";
-          html += "<img src="+data[i.toString()]['image_url']+" class='img-responsive'>";
+        // Business image
+        html += "<td class='bus-avatar'>";
+          html += "<a href="+data[i.toString()]['url']+">";
+          if(data[i.toString()]['image_url'] !== undefined) 
+            html += "<img src="+data[i.toString()]['image_url']+" class='media-object pull-left img-rounded'>";
+          else
+            html += "<img src='http://images.clipartpanda.com/restaurant-clipart-restaurant-b-w.svg' class='media-object pull-left img-circle'>";
+          html += "</a>";
         html += "</td>";
-        html += "<td>";
-          html += "<p>"+data[i.toString()]['name']+"</p>";
-          html += "<img src="+data[i.toString()]['rating_img_url']+" class='img-responsive'>";
-          html += "<p>"+data[i.toString()]['review_count']+"</p>";
-          html += "<p>"+data[i.toString()]['location']['display_address']+"</p>";
+        // Business description
+        html += "<td class='bus-body'>";
+          html += "<h2 class='media-heading'>"+data[i.toString()]['name']+"</h2>";
+          html += "<p>"
+            html += "<img src="+data[i.toString()]['rating_img_url']+" class='img-responsive' style='display: inline;'> ";
+            html += data[i.toString()]['review_count']+" reviews";
+            html += "<p>"+data[i.toString()]['location']['display_address']+"</p>";
+          html += "</p>";
+        html += "</td>";
+        // Social, who's going?
+        html += "<td class='bus-social'>";
         html += "</td>";
       html += "</tr>";
     };
 
     html += "</table>";
-*/
-    var html = "";
+/*
+    var html = "";  
+    data = res.message.businesses;
     for(var i=0; i < data.length; i++)
     {
       html += "<div class='media'>";
         html += "<div class='media-left'>";
           html += "<a href="+data[i.toString()]['url']+">";
-              html += "<img src="+data[i.toString()]['image_url']+" class='media-object pull-left'>";
+              if(data[i.toString()]['image_url'] !== undefined) 
+                html += "<img src="+data[i.toString()]['image_url']+" class='media-object pull-left img-rounded'>";
+              else
+                html += "<img src='http://images.clipartpanda.com/restaurant-clipart-restaurant-b-w.svg' class='media-object pull-left img-circle'>";
           html += "</a>";
         html += "</div>";
         html += "<div class='media-body' >";
-          html += "<h4 class='media-heading'>"+data[i.toString()]['name']+"</h4>";
+          html += "<h2 class='media-heading'>"+data[i.toString()]['name']+"</h2>";
           html += "<p>"
             html += "<img src="+data[i.toString()]['rating_img_url']+" class='img-responsive' style='display: inline;'> ";
             html += data[i.toString()]['review_count']+" reviews";
+            html += "<p>"+data[i.toString()]['location']['display_address']+"</p>";
           html += "</p>";
         html += "</div>";
       html += "</div>";
     }
-    
+  */  
     $("#search-results").html('');
     $("#search-results").append(html);
+  
   }
 
 </script>
