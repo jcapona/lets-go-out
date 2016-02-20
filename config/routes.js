@@ -23,10 +23,10 @@
 module.exports.routes = {
 
   '/': {
-    view: 'index'
+    view: 'first'
   },
-  '/signin': {
-    view: 'signin'
+  '/index': {
+    view: 'index'
   },
   'POST /login': 'AuthController.login',
   '/logout': 'AuthController.logout', 
