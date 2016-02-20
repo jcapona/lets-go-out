@@ -1,14 +1,20 @@
 <!-- index.ejs -->
-<div id="search-bar" class="container">
-    <!--<h1 class="text-center">let's go out!</h1>-->
+
+<div id="header">
+  <h1 class="text-center">let's go out!</h1>
+  <p class="text-center">where do you wanna go?</p>
+</div>
+
+<div id="search-bar">
+  <div class="container">
     <div class="row">
       <div class="col-md-12">
         <div class="input-group">
-
+          <!--
           <span class="input-group-addon input-lg" style="background-color: white; border-width: 0px;">
             <i class="fa fa-map-marker fa-1x"></i>
           </span>
-          
+          -->
           <input id="search" type="text" name="location" class="form-control input-lg" placeholder="Where are you?">
           
           <span class="input-group-btn">
@@ -23,10 +29,14 @@
     <span  id="search-results"></span>
   </div>
 
+  </div>
 </div>
 
-
 <script type="text/javascript">
+
+  $("#search").keypress(function() {
+     $("#header").addClass("hidden");
+  });
 
     $("#search-btn").on('click',function(e)
   {
