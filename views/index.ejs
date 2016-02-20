@@ -31,7 +31,7 @@
 
 <div class="container">
   <div id="search-bar" class="hidden">
-    <h1 class="text-center">let's go out!</h1>
+    <!--<h1 class="text-center">let's go out!</h1>-->
     <div class="row">
       <div class="col-md-12">
         <div class="input-group">
@@ -66,6 +66,8 @@
   $("#search-start").on('click',function() {
     $("#search-bar").removeClass("hidden");
     $("#search-bar").addClass("show");
+    $("#nav").removeClass("hidden");
+    $("#nav").addClass("show");
     $("#main").addClass("hidden");
   });
 
@@ -100,12 +102,12 @@
   function parseJsonResults(res) {
 
     var html = "";
-    html += "<table>";
+    html += "<table class='bus-table'>";
 
     data = res.message.businesses;
     for(var i=0; i < data.length; i++)
       {
-      html += "<tr>";
+      html += "<tr class='bus'>";
         // Business image
         html += "<td class='bus-avatar'>";
           html += "<a href="+data[i.toString()]['url']+">";
@@ -121,11 +123,12 @@
           html += "<p>"
             html += "<img src="+data[i.toString()]['rating_img_url']+" class='img-responsive' style='display: inline;'> ";
             html += data[i.toString()]['review_count']+" reviews";
+            html += "</p>";
             html += "<p>"+data[i.toString()]['location']['display_address']+"</p>";
-          html += "</p>";
         html += "</td>";
         // Social, who's going?
         html += "<td class='bus-social'>";
+          html += "Holi"
         html += "</td>";
       html += "</tr>";
     };
