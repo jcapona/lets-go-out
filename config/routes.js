@@ -30,6 +30,7 @@ module.exports.routes = {
   },
   'POST /login': 'AuthController.login',
   '/logout': 'AuthController.logout', 
-  'GET /event/*': 'EventController.search',
-
+  '/event/go': 'EventController.go',
+  '/event/ungo': 'EventController.ungo',
+  '/event/search': 'EventController.search',
 };
