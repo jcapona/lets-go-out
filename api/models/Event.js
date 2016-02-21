@@ -8,7 +8,18 @@
 module.exports = {
 
   attributes: {
-
+  		id: {
+            type: 'string',
+        },
+        going: {
+            type: 'integer',
+        },
+        day: {
+        	type: 'string',
+        },
+        toJSON: function() {
+            return this.toObject();
+        }
   }
 };
 
