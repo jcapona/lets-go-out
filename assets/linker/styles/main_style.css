@@ -22,11 +22,11 @@ body {
 }
 
 #main h1 {
-	font-size: 700%;
+	font-size: 7vw;
 }
 
 #main p {
-	font-size: 300%;
+	font-size: 2vw;
 }
 
 #main table {
@@ -43,17 +43,14 @@ body {
 }
 
 #main a {
+	font-size: 1vw;
 	color: #E4FDE1;
 	text-decoration: none;	
 }
 
-h1, h2, h3 {
+h1, h2  {
   font-family: 'Montserrat', sans-serif;
   color: #E4FDE1;
-}
-
-h4 {
-  font-family: 'Montserrat', sans-serif;
 }
 
 p, li, a {
@@ -106,9 +103,10 @@ p, li, a {
 	background-color: #E4FDE1;
 }
 
-.bus h2 {
-	color: #028090
+.bus h2, .bus h4 {
+	color: #028090;
 }
+
 .bus-table {
 	width: 100%;
 }
