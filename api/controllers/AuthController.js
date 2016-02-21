@@ -15,7 +15,7 @@ module.exports = {
         req.session.flash = {
           error: info.message
         }
-        return res.redirect('/signin');
+        return res.redirect('/index');
         // return res.send({ message: info.message, user: user });
       }
       req.logIn(user, function(err) {
@@ -25,7 +25,7 @@ module.exports = {
         req.session.flash = {
           success: info.message
         } 
-        return res.redirect('/');
+        return res.redirect('/index');
         //return res.send({ message: info.message, user: user });
       });
 
