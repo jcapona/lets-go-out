@@ -1,17 +1,9 @@
 /**
  * EventController
  *
- * @description :: Server-side logic for managing events
+ * @description :: Server-side logic for managing social events
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
-
-/*
-API v2.0
-Consumer Key  cejkkcLoqNYxpO11QDzYog
-Consumer Secret -QMfIUEAFz59sVuMxjzpWinXKAo
-Token GyGczgYAy_KePiuSXUnZdurr-bmKcLw8
-Token Secret  D6vnpL8R4z5rNslVmLvXf7aPcSU
-*/
 
 var yelp = require("node-yelp");
 var yelpKeys = {
@@ -22,8 +14,76 @@ var yelpKeys = {
 };
 
 module.exports = {
-	'search' : function(req, res) {
+  
+  'go' : function(req, res) {
+
+    if(req.query.id === undefined)
+      return res.send("Error");
+
+    var dt = new Date();
+    var date = dt.getFullYear() + "/" + (dt.getMonth() + 1) + "/" + dt.getDate();
+
+    Event.findOrCreate({id: req.query.id, date: date.toString()}).exec(function(error, event) {
     
+      if(error) {
+        console.error(error);
+        return res.send('');
+      }
+
+      if(event.going === undefined)
+        event.going = 1;
+      else
+        event.going += 1;
+
+      event.save(function(error) {
+        if(error) {
+          console.error(error);
+          return res.send('');
+        } 
+        else 
+        {
+          return res.send({going: event.going});
+        }
+      });
+    
+    });
+
+  },
+  'ungo' : function(req, res) {
+
+    if(req.query.id === undefined)
+      return res.send("Error");
+
+    var dt = new Date();
+    var date = dt.getFullYear() + "/" + (dt.getMonth() + 1) + "/" + dt.getDate();
+
+    Event.findOrCreate({id: req.query.id, date: date.toString()}).exec(function(error, event) {
+    
+      if(error) {
+        console.error(error);
+        return res.send('');
+      }
+
+      if(event.going === undefined)
+        event.going = 0;
+      else
+        event.going -= 1;
+
+      event.save(function(error) {
+        if(error) {
+          console.error(error);
+          return res.send('');
+        } 
+        else 
+        {
+          return res.send({going: event.going});
+        }
+      });
+    
+    });
+
+  },
+	'search' : function(req, res) {
     var term = req.query.term !== undefined ? req.query.term : "";
     var location = req.query.location !== undefined ? req.query.location: "";
     
@@ -46,11 +106,34 @@ module.exports = {
 		}).then(function (data) {
 		  var businesses = data.businesses;
 		  var location = data.region;
-		  
-		  return res.send({
-        message: data
-      });
-		});
 
+      businesses.forEach(function(val, index){
+        var dt = new Date();
+        var date = dt.getFullYear() + "/" + (dt.getMonth() + 1) + "/" + dt.getDate();
+
+        Event.findOrCreate({date: date, id: val.id}).exec(function(error, event){
+          if(event.going === undefined)
+          {
+            val.going = 0;
+            event.going = 0;
+          }
+          else
+            val.going = event.going;
+
+          if(index+1 === businesses.length)
+          {
+            return res.send({
+              message: data
+            });
+          }
+        });
+      });
+      //console.log(JSON.stringify(data,null,2));
+		})
+    .catch(function (err) {
+      console.log(JSON.stringify(err,null,2));
+      res.status(400);
+      return res.send({message: err});
+    });
   },
 };
