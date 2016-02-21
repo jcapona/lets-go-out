@@ -2,7 +2,6 @@ body {
   background-color: #F45B69;
 }
 
-
 #nav {
   background-color: #F45B69;
   width: 100%;
@@ -59,8 +58,22 @@ p, li, a {
   color: black;
 }
 
+#header {
+	margin-top: 20vh
+}
+
+#header h1 {
+	font-size: 500%;
+	margin: 0;
+}
+
+#header p {
+	font-size: 200%;
+}
+
+
 #search-bar {
-	margin: 10px 0 50px 0;
+	margin: auto;
 }
 
 .bus-avatar {
@@ -117,18 +130,4 @@ p, li, a {
 
 .row {
 	margin-bottom: 50px;
-}
-
-#header {
-	height: 40vh;
-	padding-top: 20vh;
-}
-
-#header h1 {
-	font-size: 500%;
-	margin: 0;
-}
-
-#header p {
-	font-size: 200%;
 }
