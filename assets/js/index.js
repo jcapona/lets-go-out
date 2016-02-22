@@ -1,52 +1,139 @@
 $(document).ready(function(){
-  var query = "";
+  
+  // Cookie management
+  // http://www.quirksmode.org/js/cookies.html
+  function createCookie(name,value,days) {
+    if (days) {
+      var date = new Date();
+      date.setTime(date.getTime()+(days*24*60*60*1000));
+      var expires = "; expires="+date.toGMTString();
+    }
+    else var expires = "";
+    document.cookie = name+"="+value+expires+"; path=/";
+  }
+
+  function readCookie(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0;i < ca.length;i++) {
+      var c = ca[i];
+      while (c.charAt(0)==' ') c = c.substring(1,c.length);
+      if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+    }
+    return null;
+  }
+
+  function eraseCookie(name) {
+    createCookie(name,"",-1);
+  }
+
+
+  /**
+    Restores search & selection if user tries to go to a place while not logged in
+  */
+  if(readCookie('login-restore') !== null)
+  {
+    $("#header").addClass("hidden");
+    $("#search-results").html('<div class="text-center"><i class="fa fa-circle-o-notch fa-spin fa-5x"></i></div>');
+
+    // Restore search
+    $.ajax({
+      url: '/event/search',
+      type: 'GET',
+      data: readCookie('query'),
+      error: function(jqXHR, textStatus, errorThrown) {
+        $("#search-results").html('');
+        $("#search-results").append("<h4 class='text-center'>Error: "+jqXHR['responseJSON']['message']['source']['text']+" :(</h4>");
+      },
+      success: function(data) {
+        
+        parseJsonResults(data);
+
+        var objData = readCookie('query-selection');
+        
+        ($("#"+objData).addClass("active"));
+          
+        // Restore selection
+        $.ajax({
+          url: '/event/go',
+          type: 'GET',
+          data: {id: objData},
+          error: function(jqXHR, textStatus, errorThrown) {
+            console.log(jqXHR);
+          },
+          success: function(data) {
+            eraseCookie('query-selection');
+            eraseCookie('query');
+            eraseCookie('login-restore');
+            ($("#"+objData).html(data['going'] + " going"));
+          }
+        });
+      }
+    });
+
+
+  }
 
   $("#search").keypress(function() {
      $("#header").addClass("hidden");
   });
 
-  $('#search-results').on('click', '.btn-social', function (e) { 
-    var obj = ((this));
-    e.stopPropagation();
-    e.preventDefault();
-
-    if($(this).hasClass("active"))
+  $('#search-results').on('click', '.btn-social', function (e) {  
+    
+    // If not logged in, prompts user to do so
+    if(readCookie('user') === "false")
     {
-      console.log("Oops, not going :(");
-      ($(this).removeClass("active"));
-      
-      $.ajax({
-        url: '/event/ungo',
-        type: 'GET',
-        data: {id: ($(this).attr("value"))},
-        error: function(jqXHR, textStatus, errorThrown) {
-          console.log(jqXHR);
-        },
-        success: function(data) {
-          ($(obj).html(data['going'] + " going"));
-        }
-      });
+      createCookie('login-restore',"true",1);
+      createCookie('query-selection',($(this).attr("value")),1);
+      $('#myModal').modal('show');
     }
     else
     {
-      ($(this).addClass("active"));
-      
-      $.ajax({
-        url: '/event/go',
-        type: 'GET',
-        data: {id: ($(this).attr("value"))},
-        error: function(jqXHR, textStatus, errorThrown) {
-          console.log(jqXHR);
-        },
-        success: function(data) {
-          ($(obj).html(data['going'] + " going"));
-        }
-      });
+
+      var obj = ($(this).attr("value"));
+      e.stopPropagation();
+      e.preventDefault();
+
+      if($(this).hasClass("active"))
+      {
+        ($(this).removeClass("active"));
+        
+        $.ajax({
+          url: '/event/ungo',
+          type: 'GET',
+          data: {id: ($(this).attr("value"))},
+          error: function(jqXHR, textStatus, errorThrown) {
+            console.log(jqXHR);
+          },
+          success: function(data) {
+            ($(obj).html(data['going'] + " going"));
+          }
+        });
+      }
+      else
+      {
+        ($(this).addClass("active"));
+        
+        $.ajax({
+          url: '/event/go',
+          type: 'GET',
+          data: {id: ($(this).attr("value"))},
+          error: function(jqXHR, textStatus, errorThrown) {
+            console.log(jqXHR);
+          },
+          success: function(data) {
+            ($(obj).html(data['going'] + " going"));
+          }
+        });
+      }
+
     }
   });
 
   $("#search-btn").on('click',function(e)
   {
+    createCookie('query',$("#search").serialize(),1)
+
     $("#search-results").html('<div class="text-center"><i class="fa fa-circle-o-notch fa-spin fa-5x"></i></div>');
     query = $("#search").serialize();
 
@@ -58,11 +145,11 @@ $(document).ready(function(){
       type: 'GET',
       data: query,
       error: function(jqXHR, textStatus, errorThrown) {
+        console.log(jqXHR);
         $("#search-results").html('');
-        $("#search-results").append("<h4 class='text-center'>"+jqXHR['responseJSON']['message']+"</h4>");
+        $("#search-results").append("<h4 class='text-center'>Error: "+jqXHR['responseJSON']['message']['source']['text']+" :(</h4>");
       },
       success: function(data) {
-        console.log(data);
         parseJsonResults(data);
       }
     });
@@ -97,7 +184,7 @@ $(document).ready(function(){
         html += "</td>";
         // Social, who's going?
         html += "<td class='bus-social'>";
-          html += "<button class='btn-social btn btn-default' value="+data[i.toString()]['id']+" type='button'>"+data[i.toString()]['going']+" going</button>";
+          html += "<button class='btn-social btn btn-default' id="+data[i.toString()]['id']+" value="+data[i.toString()]['id']+" type='button'>"+data[i.toString()]['going']+" going</button>";
         html += "</td>";
       html += "</tr>";
     };
