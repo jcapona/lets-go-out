@@ -31,53 +31,72 @@ $(document).ready(function(){
   /**
     Restores search & selection if user tries to go to a place while not logged in
   */
-  if(readCookie('login-restore') !== null)
+  if((readCookie('login-restore') !== null))
   {
-    $("#header").addClass("hidden");
-    $("#search-results").html('<div class="text-center"><i class="fa fa-circle-o-notch fa-spin fa-5x"></i></div>');
+      $("#header").addClass("hidden");
+      $("#search-results").html('<div class="text-center"><i class="fa fa-circle-o-notch fa-spin fa-5x"></i></div>');
 
-    // Restore search
-    $.ajax({
-      url: '/event/search',
-      type: 'GET',
-      data: readCookie('query'),
-      error: function(jqXHR, textStatus, errorThrown) {
-        $("#search-results").html('');
-        $("#search-results").append("<h4 class='text-center'>Error: "+jqXHR['responseJSON']['message']['source']['text']+" :(</h4>");
-      },
-      success: function(data) {
-        
-        parseJsonResults(data);
-
-        var objData = readCookie('query-selection');
-        
-        ($("#"+objData).addClass("active"));
-          
-        // Restore selection
-        $.ajax({
-          url: '/event/go',
-          type: 'GET',
-          data: {id: objData},
-          error: function(jqXHR, textStatus, errorThrown) {
-            console.log(jqXHR);
-          },
-          success: function(data) {
-            eraseCookie('query-selection');
-            eraseCookie('query');
-            eraseCookie('login-restore');
-            ($("#"+objData).html(data['going'] + " going"));
-          }
-        });
-      }
-    });
-
-
+      // Restore search
+      $.ajax({
+        url: '/event/search',
+        type: 'GET',
+        data: readCookie('query'),
+        error: function(jqXHR, textStatus, errorThrown) {
+          $("#search-results").html('');
+          $("#search-results").append("<h4 class='text-center'>Error: "+jqXHR['responseJSON']['message']['source']['text']+" :(</h4>");
+        },
+        success: function(data) {
+          // Check if user is logged
+          parseJsonResults(data);
+          $.ajax({
+            url: '/user/',
+            type: 'POST',
+            data: {},
+            error: function(jqXHR, textStatus, errorThrown) {
+              console.log(jqXHR);
+            },
+            success: function(data) {
+              if(data['user'] !== undefined)
+              {
+                console.log("Logged");
+                var objData = readCookie('query-selection');
+                
+                ($("#"+objData).addClass("active"));
+                  
+                // Restore selection
+                $.ajax({
+                  url: '/event/go',
+                  type: 'GET',
+                  data: {id: objData},
+                  error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR);
+                  },
+                  success: function(data) {
+                    eraseCookie('query-selection');
+                    eraseCookie('query');
+                    eraseCookie('login-restore');
+                    ($("#"+objData).html(data['going'] + " going"));
+                  }
+                });
+              }
+              else
+              {
+                console.log("Not logged in :(")
+              }
+            }
+          });
+        }
+      });
+    
   }
 
   $("#search").keypress(function() {
      $("#header").addClass("hidden");
   });
 
+  /**
+    When user tries to click on go button
+  */
   $('#search-results').on('click', '.btn-social', function (e) {  
     
     // If not logged in, prompts user to do so
@@ -89,7 +108,6 @@ $(document).ready(function(){
     }
     else
     {
-
       var obj = ($(this).attr("value"));
       e.stopPropagation();
       e.preventDefault();
