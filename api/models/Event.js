@@ -8,7 +8,7 @@
 module.exports = {
 
   attributes: {
-  		id: {
+  		name: {
             type: 'string',
         },
         going: {
