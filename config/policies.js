@@ -24,6 +24,10 @@ module.exports.policies = {
   'EventController': {
     '*': 'flash'
   },
+  'UserController': {
+    '*': 'sessionAuth'
+  },
+
 
   /***************************************************************************
   *                                                                          *
