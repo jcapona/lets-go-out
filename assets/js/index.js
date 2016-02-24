@@ -168,6 +168,7 @@ $(document).ready(function(){
         $("#search-results").append("<h4 class='text-center'>Error: "+jqXHR['responseJSON']['message']['source']['text']+" :(</h4>");
       },
       success: function(data) {
+        console.log(data);
         parseJsonResults(data);
       }
     });
@@ -202,7 +203,14 @@ $(document).ready(function(){
         html += "</td>";
         // Social, who's going?
         html += "<td class='bus-social'>";
-          html += "<button class='btn-social btn btn-default' id="+data[i.toString()]['id']+" value="+data[i.toString()]['id']+" type='button'>"+data[i.toString()]['going']+" going</button>";
+          if(data[i.toString()]['going_user'] === 0)
+          {
+            html += "<button class='btn-social btn btn-default' id="+data[i.toString()]['id']+" value="+data[i.toString()]['id']+" type='button'>"+data[i.toString()]['going']+" going</button>";
+          }
+          else
+          {
+            html += "<button class='btn-social btn btn-default active' id="+data[i.toString()]['id']+" value="+data[i.toString()]['id']+" type='button'>"+data[i.toString()]['going']+" going</button>";
+          }
         html += "</td>";
       html += "</tr>";
     };
