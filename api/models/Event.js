@@ -13,6 +13,7 @@ module.exports = {
         },
         going: {
             type: 'integer',
+            defaultsTo: 0,
         },
         day: {
         	type: 'string',
