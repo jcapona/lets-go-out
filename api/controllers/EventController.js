@@ -23,26 +23,37 @@ module.exports = {
     var dt = new Date();
     var date = dt.getFullYear() + "/" + (dt.getMonth() + 1) + "/" + dt.getDate();
 
-    Event.findOrCreate({id: req.query.id, date: date.toString()}).exec(function(error, event) {
+    Event.findOrCreate({name: req.query.id, date: date.toString()}).exec(function(error, event) {
     
       if(error) {
         console.error(error);
         return res.send('');
       }
 
-      if(event.going === undefined)
-        event.going = 1;
-      else
-        event.going += 1;
+      Attendance.find({user_id: req.user.id, event_id: event.id}).exec(function (error,att){
 
-      event.save(function(error) {
-        if(error) {
-          console.error(error);
-          return res.send('');
-        } 
-        else 
+        if(att.length === 0)
         {
-          return res.send({going: event.going});
+          Attendance.create({user_id: req.user.id, event_id: event.id}).exec(function (error, att){
+            if(error) {
+              console.error(error);
+              return res.send('');
+            }
+            else
+            {
+              Attendance.count({event_id: event.id}).exec(function (error, found) {
+                return res.send({going: found});
+              });
+            }
+          });
+        }
+        else
+        {
+          // Already going
+          Attendance.count({event_id: event.id}).exec(function (error, found) {
+            console.log("You're already going!");
+            return res.send({going: found});
+          });
         }
       });
     
@@ -57,26 +68,23 @@ module.exports = {
     var dt = new Date();
     var date = dt.getFullYear() + "/" + (dt.getMonth() + 1) + "/" + dt.getDate();
 
-    Event.findOrCreate({id: req.query.id, date: date.toString()}).exec(function(error, event) {
+    Event.findOrCreate({name: req.query.id, date: date.toString()}).exec(function(error, event) {
     
       if(error) {
         console.error(error);
         return res.send('');
       }
 
-      if(event.going === undefined)
-        event.going = 0;
-      else
-        event.going -= 1;
-
-      event.save(function(error) {
+      Attendance.destroy({user_id: req.user.id, event_id: event.id}).exec(function (error){
         if(error) {
           console.error(error);
           return res.send('');
-        } 
-        else 
+        }
+        else
         {
-          return res.send({going: event.going});
+          Attendance.count({event_id: event.id}).exec(function (error, found) {
+            return res.send({going: found});
+          });
         }
       });
     
@@ -113,18 +121,41 @@ module.exports = {
         var dt = new Date();
         var date = dt.getFullYear() + "/" + (dt.getMonth() + 1) + "/" + dt.getDate();
 
-        Event.findOrCreate({date: date, id: val.id}).exec(function(error, event){
+        Event.findOrCreate({date: date, name: val.id}).exec(function(error, event){
 
-          val.going = event.going;
+          Attendance.count({event_id: event.id}).exec(function (error, found) {
+            val.going = found;
 
-          if((j === businesses.length))
-          {
-            return res.send({
-              message: data
-            });
-          }
-          else
-            j++;
+            
+            if(req.user !== undefined) 
+            {
+              Attendance.find({event_id: event.id, user_id: req.user.id}).exec(function (error, found) {
+                val.going_user = found.length;
+                
+                if((j === businesses.length))
+                {
+                  return res.send({
+                    message: data
+                  });
+                }
+                else
+                  j++;
+              });
+            }
+            else
+            {
+              val.going_user = 0;
+              if((j === businesses.length))
+                {
+                  return res.send({
+                    message: data
+                  });
+                }
+                else
+                  j++;
+            }
+
+          });
         });
       });
 		})
