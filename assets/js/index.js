@@ -106,7 +106,7 @@ $(document).ready(function(){
             console.log(jqXHR);
           },
           success: function(data) {
-            ($(obj).html(data['going'] + " going"));
+            ($("#"+obj).html(data['going'] + " going"));
           }
         });
       }
@@ -122,7 +122,7 @@ $(document).ready(function(){
             console.log(jqXHR);
           },
           success: function(data) {
-            ($(obj).html(data['going'] + " going"));
+            ($("#"+obj).html(data['going'] + " going"));
           }
         });
       }
