@@ -84,6 +84,7 @@ module.exports = {
 
   },
 	'search' : function(req, res) {
+
     var term = req.query.term !== undefined ? req.query.term : "";
     var location = req.query.location !== undefined ? req.query.location: "";
     
@@ -96,7 +97,7 @@ module.exports = {
 		  },
 
 		  httpClient: {
-		    maxSockets: 25  // ~> Default is 10 
+		    maxSockets: 25
 		  }
 		});
 		 
@@ -106,29 +107,26 @@ module.exports = {
 		}).then(function (data) {
 		  var businesses = data.businesses;
 		  var location = data.region;
+      var j=1;
 
       businesses.forEach(function(val, index){
         var dt = new Date();
         var date = dt.getFullYear() + "/" + (dt.getMonth() + 1) + "/" + dt.getDate();
 
         Event.findOrCreate({date: date, id: val.id}).exec(function(error, event){
-          if(event.going === undefined)
-          {
-            val.going = 0;
-            event.going = 0;
-          }
-          else
-            val.going = event.going;
 
-          if(index+1 === businesses.length)
+          val.going = event.going;
+
+          if((j === businesses.length))
           {
             return res.send({
               message: data
             });
           }
+          else
+            j++;
         });
       });
-      //console.log(JSON.stringify(data,null,2));
 		})
     .catch(function (err) {
       console.log(JSON.stringify(err,null,2));
