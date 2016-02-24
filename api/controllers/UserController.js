@@ -8,8 +8,10 @@
 module.exports = {
 
 	user: function(req, res) {
-		return res.redirect("/");
+		if(req.user !== undefined)
+			return res.send({user: req.user});
+		else
+			return res.send({});
 	}
 	
 };
-
