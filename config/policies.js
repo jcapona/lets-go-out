@@ -21,13 +21,6 @@ module.exports.policies = {
 
    '*': 'flash',
 
-  'EventController': {
-    '*': 'flash'
-  },
-  'UserController': {
-    '*': 'flash'
-  },
-
 
   /***************************************************************************
   *                                                                          *
