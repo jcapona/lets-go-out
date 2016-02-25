@@ -61,7 +61,7 @@ $(document).ready(function(){
                 console.log("Logged");
                 var objData = readCookie('query-selection');
                 
-                ($("#"+objData).addClass("active"));
+                ($("#"+objData).addClass("active btn-success"));
                   
                 // Restore selection
                 $.ajax({
@@ -115,7 +115,8 @@ $(document).ready(function(){
       if($(this).hasClass("active"))
       {
         ($(this).removeClass("active"));
-        
+        ($(this).removeClass("btn-success"));
+
         $.ajax({
           url: '/event/ungo',
           type: 'GET',
@@ -131,6 +132,7 @@ $(document).ready(function(){
       else
       {
         ($(this).addClass("active"));
+        ($(this).addClass("btn-success"));
         
         $.ajax({
           url: '/event/go',
@@ -185,7 +187,7 @@ $(document).ready(function(){
       html += "<tr class='bus'>";
         // Business image
         html += "<td class='bus-avatar'>";
-          html += "<a href="+data[i.toString()]['url']+">";
+          html += "<a href="+data[i.toString()]['url']+" target='_blank'>";
           if(data[i.toString()]['image_url'] !== undefined) 
             html += "<img src="+data[i.toString()]['image_url']+" class='media-object pull-left img-rounded'>";
           else
@@ -194,12 +196,14 @@ $(document).ready(function(){
         html += "</td>";
         // Business description
         html += "<td class='bus-body'>";
-          html += "<h2 class='media-heading'>"+data[i.toString()]['name']+"</h2>";
+          html += "<a href="+data[i.toString()]['url']+ " target='_blank'>";
+            html += "<h2 class='media-heading'>"+data[i.toString()]['name']+"</h2>";
+          html += "</a>"
           html += "<p>"
             html += "<img src="+data[i.toString()]['rating_img_url']+" class='img-responsive' style='display: inline;'> ";
             html += data[i.toString()]['review_count']+" reviews";
             html += "</p>";
-            html += "<p>"+data[i.toString()]['location']['display_address']+"</p>";
+            html += "<p>"+data[i.toString()]['location']['display_address']+" | "+ data[i.toString()]['location']['display_phone'] +"</p>";
         html += "</td>";
         // Social, who's going?
         html += "<td class='bus-social'>";
@@ -209,7 +213,7 @@ $(document).ready(function(){
           }
           else
           {
-            html += "<button class='btn-social btn btn-default active' id="+data[i.toString()]['id']+" value="+data[i.toString()]['id']+" type='button'>"+data[i.toString()]['going']+" going</button>";
+            html += "<button class='btn-social btn btn-default active btn-success' id="+data[i.toString()]['id']+" value="+data[i.toString()]['id']+" type='button'>"+data[i.toString()]['going']+" going</button>";
           }
         html += "</td>";
       html += "</tr>";
