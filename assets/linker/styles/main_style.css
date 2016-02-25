@@ -44,7 +44,7 @@ body {
 #main a {
 	font-size: 1vw;
 	color: #E4FDE1;
-	text-decoration: none;	
+	text-decoration: none;
 }
 
 h1, h2  {
@@ -130,4 +130,8 @@ p, li, a {
 
 .row {
 	margin-bottom: 50px;
+}
+
+.bus a {
+	text-decoration: none;
 }
